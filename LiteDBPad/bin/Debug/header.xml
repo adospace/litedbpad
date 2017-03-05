@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataContextDriver>
+  <MainAssembly>LiteDBPad.dll</MainAssembly>
+  <SupportUri>https://github.com/adospace/LiteDBPad</SupportUri>
+</DataContextDriver>

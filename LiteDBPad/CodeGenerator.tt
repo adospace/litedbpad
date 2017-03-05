@@ -1,0 +1,77 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+using System;
+using System.Collections.Generic;
+using LiteDB;
+using LiteDBPad;
+
+namespace <#= Namespace #>
+{
+    public class <#= TypeName #> : IDisposable
+    {
+        private LiteDatabase _database = null;
+
+	   public <#= TypeName #>(ConnectionString connectionString)
+	   {
+		  if (connectionString == null)
+                throw new ArgumentNullException("connectionString");
+			 
+		  _database = new LiteDatabase(connectionString);
+	   }
+
+	   public LiteDatabase Database { get { return _database; }}
+
+	   <# foreach (var collectionName in _collectionNames) {#>
+	   public LiteCollection<DumpableBsonDocument> <#= Capitalize(collectionName) #>
+	   {
+		  get
+		  {
+			 return _database.GetCollection<DumpableBsonDocument>("<#= collectionName #>");
+		  }		  
+	   }
+	   <# } #>
+
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                _database.Dispose();
+                _database = null;
+
+                disposedValue = true;
+            }
+        }
+
+        ~<#= TypeName #>()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(false);
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+    
+    }
+
+
+}
