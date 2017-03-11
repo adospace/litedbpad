@@ -13,5 +13,5 @@ LiteDbPad can open LiteDB 3.0 files and let you specify some connection string p
 Query database with expressions like
 
 ```c#
-mycollectionname.FindAll()
+<mycollectionname>.FindAll()
 ```
