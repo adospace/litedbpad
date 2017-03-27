@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.CodeDom.Compiler;
 using Microsoft.CSharp;
+using System.IO;
 
 namespace LiteDBPad
 {
@@ -97,14 +98,29 @@ namespace LiteDBPad
             if (customType == null)
                 throw new InvalidOperationException();
 
-            return GetSchema(cxInfo, customType);
+            var items = GetSchema(cxInfo, customType);
+#if DEBUG
+            Log("Found {0} items", items.Count);
+#endif
+            return items;
         }
 
         private List<ExplorerItem> GetSchema(IConnectionInfo cxInfo, Type customType)
         {
+#if DEBUG
+            var topLevelProperties = from prop in customType.GetProperties()
+                                     where prop.PropertyType != typeof(string)
+
+                                     // Display all properties of type IEnumerable<T> (except for string!)
+                                     let ienumerableOfT = prop.PropertyType.GetInterface("System.Collections.Generic.IEnumerable`1")
+                                     where ienumerableOfT != null
+                                     select prop;
+            foreach (var tp in topLevelProperties)
+                Log("TopLevelProperty={0}", tp);
+#endif
             // Return the objects with which to populate the Schema Explorer by reflecting over customType.
 
-            // We'll start by retrieving all the properties of the custom type that implement IEnumerable<T>:
+                                     // We'll start by retrieving all the properties of the custom type that implement IEnumerable<T>:
             var topLevelProps =
             (
                  from prop in customType.GetProperties()
@@ -132,12 +148,12 @@ namespace LiteDBPad
             var elementTypeLookup = topLevelProps.ToLookup(tp => (Type)tp.Tag);
 
             // Populate the columns (properties) of each entity:
-            foreach (ExplorerItem table in topLevelProps)
-                table.Children = ((Type)table.Tag)
-                     .GetProperties()
-                     .Select(childProp => GetChildItem(elementTypeLookup, childProp))
-                     .OrderBy(childItem => childItem.Kind)
-                     .ToList();
+            //foreach (ExplorerItem table in topLevelProps)
+            //    table.Children = ((Type)table.Tag)
+            //         .GetProperties()
+            //         .Select(childProp => GetChildItem(elementTypeLookup, childProp))
+            //         .OrderBy(childItem => childItem.Kind)
+            //         .ToList();
 
             return topLevelProps;
         }
@@ -187,5 +203,12 @@ namespace LiteDBPad
 
             return false;
         }
+
+#if DEBUG
+        public static void Log(string message, params object[] values)
+        {
+            File.AppendAllText(@"c:\temp\litedbpad.log", string.Format("{0}{1}{2}", DateTime.Now.ToLongTimeString(), string.Format(message, values), Environment.NewLine));
+        }
+#endif
     }
 }

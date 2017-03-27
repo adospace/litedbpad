@@ -24,6 +24,11 @@ namespace <#= Namespace #>
 	   }
 
 	   public LiteDatabase Database { get { return _database; }}
+	   public LiteCollection<DumpableBsonDocument> GetCollection(string name)
+	   {
+		  return _database.GetCollection<DumpableBsonDocument>(name);
+	   }
+
 
 	   <# foreach (var collectionName in _collectionNames) {#>
 	   public LiteCollection<DumpableBsonDocument> <#= Capitalize(collectionName) #>
@@ -32,6 +37,14 @@ namespace <#= Namespace #>
 		  {
 			 return _database.GetCollection<DumpableBsonDocument>("<#= collectionName #>");
 		  }		  
+	   }
+
+	   public DumpableBsonDocumentCollection All<#= Capitalize(collectionName) #>
+	   {
+		  get
+		  {
+			 return new DumpableBsonDocumentCollection(_database.GetCollection<DumpableBsonDocument>("<#= collectionName #>").FindAll());
+		  }
 	   }
 	   <# } #>
 

@@ -18,7 +18,7 @@ namespace LiteDBPad
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+    #line 1 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     public partial class CodeGenerator : CodeGeneratorBase
     {
@@ -31,14 +31,14 @@ namespace LiteDBPad
             this.Write("\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing LiteDB;\r\nusing LiteDBPa" +
                     "d;\r\n\r\nnamespace ");
             
-            #line 12 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+            #line 12 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    public class ");
             
-            #line 14 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+            #line 14 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
@@ -46,7 +46,7 @@ namespace LiteDBPad
             this.Write(" : IDisposable\r\n    {\r\n        private LiteDatabase _database = null;\r\n\r\n\t   publ" +
                     "ic ");
             
-            #line 18 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+            #line 18 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
@@ -60,17 +60,22 @@ namespace LiteDBPad
 	   }
 
 	   public LiteDatabase Database { get { return _database; }}
+	   public LiteCollection<DumpableBsonDocument> GetCollection(string name)
+	   {
+		  return _database.GetCollection<DumpableBsonDocument>(name);
+	   }
+
 
 	   ");
             
-            #line 28 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+            #line 33 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
  foreach (var collectionName in _collectionNames) {
             
             #line default
             #line hidden
             this.Write("\t   public LiteCollection<DumpableBsonDocument> ");
             
-            #line 29 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+            #line 34 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Capitalize(collectionName)));
             
             #line default
@@ -78,14 +83,29 @@ namespace LiteDBPad
             this.Write("\r\n\t   {\r\n\t\t  get\r\n\t\t  {\r\n\t\t\t return _database.GetCollection<DumpableBsonDocument>" +
                     "(\"");
             
-            #line 33 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+            #line 38 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(collectionName));
             
             #line default
             #line hidden
-            this.Write("\");\r\n\t\t  }\t\t  \r\n\t   }\r\n\t   ");
+            this.Write("\");\r\n\t\t  }\t\t  \r\n\t   }\r\n\r\n\t   public DumpableBsonDocumentCollection All");
             
-            #line 36 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+            #line 42 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Capitalize(collectionName)));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t   {\r\n\t\t  get\r\n\t\t  {\r\n\t\t\t return new DumpableBsonDocumentCollection(_database." +
+                    "GetCollection<DumpableBsonDocument>(\"");
+            
+            #line 46 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(collectionName));
+            
+            #line default
+            #line hidden
+            this.Write("\").FindAll());\r\n\t\t  }\r\n\t   }\r\n\t   ");
+            
+            #line 49 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
  } 
             
             #line default
@@ -113,7 +133,7 @@ namespace LiteDBPad
 
         ~");
             
-            #line 58 "C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\CodeGenerator.tt"
+            #line 71 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default

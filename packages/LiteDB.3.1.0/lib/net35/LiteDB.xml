@@ -216,6 +216,11 @@
             Get collection name
             </summary>
         </member>
+        <member name="P:LiteDB.LiteCollection`1.Visitor">
+            <summary>
+            Returns visitor resolver query only for internals implementations
+            </summary>
+        </member>
         <member name="T:LiteDB.LiteDatabase">
             <summary>
             The LiteDB database. Used for create a LiteDB instance and use all storage resources. It's the database connection
@@ -272,6 +277,11 @@
             Get a collection using a entity class as strong typed document. If collection does not exits, create a new one.
             </summary>
             <param name="name">Collection name (case insensitive)</param>
+        </member>
+        <member name="M:LiteDB.LiteDatabase.GetCollection``1">
+            <summary>
+            Get a collection using a name based on typeof(T).Name (BsonMapper.ResolveCollectionName function)
+            </summary>
         </member>
         <member name="M:LiteDB.LiteDatabase.GetCollection(System.String)">
             <summary>
@@ -482,6 +492,11 @@
             Get the collection page only when needed. Gets from pager always to grantee that wil be the last (in case of clear cache will get a new one - pageID never changes)
             </summary>
         </member>
+        <member name="M:LiteDB.LiteEngine.CreateDatabase(System.IO.Stream,System.String)">
+            <summary>
+            Initialize new datafile with header page + lock reserved area zone
+            </summary>
+        </member>
         <member name="M:LiteDB.LiteEngine.Min(System.String,System.String)">
             <summary>
             Returns first value from an index (first is min value)
@@ -670,6 +685,11 @@
         <member name="M:LiteDB.FileDiskService.Unlock(LiteDB.LockState)">
             <summary>
             Unlock datafile based on state
+            </summary>
+        </member>
+        <member name="M:LiteDB.FileDiskService.CreateFileStream(System.String,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)">
+            <summary>
+            Create a new filestream. Can be synced over async task (netstandard)
             </summary>
         </member>
         <member name="M:LiteDB.IDiskService.Initialize(LiteDB.Logger,System.String)">
@@ -1674,7 +1694,7 @@
         </member>
         <member name="T:LiteDB.Reflection">
             <summary>
-            Using Emit an fast and old way to create classes/structs and getter/setter fields and property. Works fine only for propertis (fields/structs use simple reflection). Not works for NetStandard (use Expressions)
+            Using Expressions is the easy and fast way to create classes, structs, get/set fields/properties. But it not works in NET35
             </summary>
             <summary>
             Helper class to get entity properties and map as BsonValue
@@ -1698,6 +1718,241 @@
         <member name="M:LiteDB.Reflection.IsList(System.Type)">
             <summary>
             Returns true if Type is any kind of Array/IList/ICollection/....
+            </summary>
+        </member>
+        <member name="M:LiteDB.Reflection.SelectMember(System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo},System.Func{System.Reflection.MemberInfo,System.Boolean}[])">
+            <summary>
+            Select member from a list of member using predicate order function to select
+            </summary>
+        </member>
+        <member name="T:LiteDB.LiteQueryable`1">
+            <summary>
+            An IQueryable-like class to write fluent query in LiteDB
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Include``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Include DBRef field in result query execution
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Include(System.String)">
+            <summary>
+            Include DBRef path in result query execution
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.ForEach(System.Action{`0})">
+            <summary>
+            Include an action function to be executed for each entity (like ForEach in List[T])
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.ForEach(System.Action{`0,System.Int32})">
+            <summary>
+            Include an action function to be executed for each entity (like ForEach in List[T]). Int parameter is index
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Where(LiteDB.Query)">
+            <summary>
+            Add new Query filter when query will be executed. This filter use database index
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Where(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Add new Query filter when query will be executed. This filter use database index
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Where(System.Boolean,LiteDB.Query)">
+            <summary>
+            Add new Query filter when query will be executed only with "condition" is true. This filter use database index
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Where(System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Add new Query filter when query will be executed only with "condition" is true. This filter use database index
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Skip(System.Int32)">
+            <summary>
+            Skip N results before starts returing entities
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Limit(System.Int32)">
+            <summary>
+            Limit (Take) results 
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.SingleById(LiteDB.BsonValue)">
+            <summary>
+            Return entity by _id key. Throws InvalidOperationException if no document
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.ToEnumerable">
+            <summary>
+            Execute query returning IEnumerable results.
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.ToList">
+            <summary>
+            Execute query and return results as a List
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.ToArray">
+            <summary>
+            Execute query and return results as an Array
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Count">
+            <summary>
+            Execute Count methos in filter query
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteQueryable`1.Exists">
+            <summary>
+            Returns true/false if filter returns any result
+            </summary>
+        </member>
+        <member name="T:LiteDB.LiteRepository">
+            <summary>
+            The LiteDB repository pattern. A simple way to access your documents in a single class with fluent query api
+            </summary>
+        </member>
+        <member name="P:LiteDB.LiteRepository.Database">
+            <summary>
+            Get database instance
+            </summary>
+        </member>
+        <member name="P:LiteDB.LiteRepository.Engine">
+            <summary>
+            Get engine instance
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.#ctor(System.String,LiteDB.BsonMapper)">
+            <summary>
+            Starts LiteDB database using a connection string for file system database
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.#ctor(LiteDB.ConnectionString,LiteDB.BsonMapper)">
+            <summary>
+            Starts LiteDB database using a connection string for file system database
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.#ctor(System.IO.Stream,LiteDB.BsonMapper,System.String)">
+            <summary>
+            Starts LiteDB database using a Stream disk
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.BeginTrans">
+            <summary>
+            Starts new transaction. Don't forgot execute ".Commit()" method from LiteTransaction
+            </summary>
+        </member>
+        <member name="P:LiteDB.LiteRepository.FileStorage">
+            <summary>
+            Returns a special collection for storage files/stream inside datafile
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Insert``1(``0,System.String)">
+            <summary>
+            Insert a new document into collection. Document Id must be a new value in collection - Returns document Id
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Insert``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Insert an array of new documents into collection. Document Id must be a new value in collection. Can be set buffer size to commit at each N documents
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Update``1(``0,System.String)">
+            <summary>
+            Update a document into collection. Returns false if not found document in collection
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Update``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Update all documents
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Upsert``1(``0,System.String)">
+            <summary>
+            Insert or Update a document based on _id key. Returns true if insert entity or false if update entity
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Upsert``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Insert or Update all documents based on _id key. Returns entity count that was inserted
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Delete``1(LiteDB.BsonValue,System.String)">
+            <summary>
+            Delete entity based on _id key
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Delete``1(LiteDB.Query,System.String)">
+            <summary>
+            Delete entity based on Query
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Delete``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.String)">
+            <summary>
+            Delete entity based on predicate filter expression
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Query``1(System.String)">
+            <summary>
+            Returns new instance of LiteQueryable that provides all method to query any entity inside collection. Use fluent API to apply filter/includes an than run any execute command, like ToList() or First()
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.SingleById``1(LiteDB.BsonValue,System.String)">
+            <summary>
+            Search for a single instance of T by Id. Shortcut from Query.SingleById
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Fetch``1(LiteDB.Query,System.String)">
+            <summary>
+            Execute Query[T].Where(query).ToList();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Fetch``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.String)">
+            <summary>
+            Execute Query[T].Where(query).ToList();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.First``1(LiteDB.Query,System.String)">
+            <summary>
+            Execute Query[T].Where(query).First();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.First``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.String)">
+            <summary>
+            Execute Query[T].Where(query).First();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.FirstOrDefault``1(LiteDB.Query,System.String)">
+            <summary>
+            Execute Query[T].Where(query).FirstOrDefault();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.FirstOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.String)">
+            <summary>
+            Execute Query[T].Where(query).FirstOrDefault();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Single``1(LiteDB.Query,System.String)">
+            <summary>
+            Execute Query[T].Where(query).Single();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.Single``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.String)">
+            <summary>
+            Execute Query[T].Where(query).Single();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.SingleOrDefault``1(LiteDB.Query,System.String)">
+            <summary>
+            Execute Query[T].Where(query).SingleOrDefault();
+            </summary>
+        </member>
+        <member name="M:LiteDB.LiteRepository.SingleOrDefault``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.String)">
+            <summary>
+            Execute Query[T].Where(query).SingleOrDefault();
             </summary>
         </member>
         <member name="T:LiteDB.LockControl">
@@ -1879,6 +2134,12 @@
             <summary>
             A custom callback to change MemberInfo behavior when converting to MemberMapper.
             Use mapper.ResolveMember(Type entity, MemberInfo property, MemberMapper documentMappedField)
+            Set FieldName to null if you want remove from mapped document
+            </summary>
+        </member>
+        <member name="F:LiteDB.BsonMapper.ResolveCollectionName">
+            <summary>
+            Custom resolve name collection based on Type 
             </summary>
         </member>
         <member name="M:LiteDB.BsonMapper.RegisterType``1(System.Func{``0,LiteDB.BsonValue},System.Func{LiteDB.BsonValue,``0})">
@@ -1927,9 +2188,9 @@
             Returns an EntityMapper from each requested Type
             </summary>
         </member>
-        <member name="M:LiteDB.BsonMapper.IsMemberId(System.Type,System.Reflection.MemberInfo)">
+        <member name="M:LiteDB.BsonMapper.GetIdMember(System.Collections.Generic.IEnumerable{System.Reflection.MemberInfo})">
             <summary>
-            Checks if this member is Id field based on member name (Id) or [BsonId] attribute
+            Gets MemberInfo that refers to Id from a document object.
             </summary>
         </member>
         <member name="M:LiteDB.BsonMapper.GetTypeMembers(System.Type)">
@@ -2635,7 +2896,30 @@
         <member name="T:LiteDB.LazyLoad`1">
             <summary>
             LazyLoad class for .NET 3.5
+            http://stackoverflow.com/questions/3207580/implementation-of-lazyt-for-net-3-5
             </summary>
+        </member>
+        <member name="P:LiteDB.LazyLoad`1.Value">
+            <summary>
+            Gets the lazily initialized value of the current Lazy{T} instance.
+            </summary>
+        </member>
+        <member name="P:LiteDB.LazyLoad`1.IsValueCreated">
+            <summary>
+            Gets a value that indicates whether a value has been created for this Lazy{T} instance.
+            </summary>
+        </member>
+        <member name="M:LiteDB.LazyLoad`1.#ctor(System.Func{`0})">
+            <summary>
+            Initializes a new instance of the Lazy{T} class.
+            </summary>
+            <param name="createValue">The delegate that produces the value when it is needed.</param>
+        </member>
+        <member name="M:LiteDB.LazyLoad`1.ToString">
+            <summary>
+            Creates and returns a string representation of the Lazy{T}.Value.
+            </summary>
+            <returns>The string representation of the Lazy{T}.Value property.</returns>
         </member>
         <member name="M:LiteDB.ExpressionExtensions.GetPath(System.Linq.Expressions.Expression)">
             <summary>
