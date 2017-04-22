@@ -7,30 +7,26 @@
         mc:Ignorable="d" 
         Title="LiteDB Connection Properties"
         WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
         SizeToContent="Height"
-        MaxWidth="400"
-        d:DesignHeight="300" d:DesignWidth="400">
-    <Grid Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        Width="400"
+        d:DesignHeight="600" d:DesignWidth="400">
 
-        <StackPanel Orientation="Vertical">
-            <TextBlock Text="File name:" Margin="0,2"/>
-            <Grid>
+        <StackPanel Orientation="Vertical" Margin="5">
+            <TextBlock Text="File name:" Margin="4"/>
+            <Grid Margin="4,0,4,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding Filename, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"/>
-                <Button Command="{Binding BrowseCommand}" Content="..." MinWidth="24" Margin="4,2,0,2" Grid.Column="1"/>
+                <TextBox Text="{Binding Filename, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0"/>
+                <Button Command="{Binding BrowseCommand}" Content="..." MinWidth="24" Margin="4,0,0,0" Grid.Column="1"/>
             </Grid>
 
-            <TextBlock Text="Password:" Margin="0,2"/>
-            <PasswordBox x:Name="pwdBox" Margin="0,2,0,5" Width="200" HorizontalAlignment="Left"/>
+            <TextBlock Text="Password:" Margin="4"/>
+            <PasswordBox x:Name="pwdBox" Margin="4,0,4,4" Width="200" HorizontalAlignment="Left"/>
 
-            <Expander Header="Advanced">
+            <Expander Header="Advanced" IsExpanded="False" Margin="0,4,0,0">
                 <StackPanel Orientation="Vertical">
                     <CheckBox IsChecked="{Binding Journal, Mode=TwoWay}" Content="Journal" Margin="2,5"/>
                     <TextBlock Text="File Mode:" Margin="2"/>
@@ -41,20 +37,20 @@
                     <TextBox Text="{Binding CacheSize, Mode=TwoWay}" Margin="2"/>
                     <TextBlock Text="Limit Size:" Margin="2"/>
                     <TextBox Text="{Binding CacheSize, Mode=TwoWay}" Margin="2"/>
+
+                    <CheckBox IsChecked="{Binding Persist, Mode=TwoWay}" Content="Persist connection info" Margin="2"/>
                 </StackPanel>                
             </Expander>
 
 
-            <CheckBox IsChecked="{Binding Persist, Mode=TwoWay}" Content="Persist connection info" Margin="0,4"/>
-
-            <Button Command="{Binding TestConnectionCommand}" Content="Test Connection" MinHeight="24" MinWidth="24" HorizontalAlignment="Right" Margin="0,10"/>
+            <Button Command="{Binding TestConnectionCommand}" Content="Test Connection" MinHeight="24" MinWidth="24" HorizontalAlignment="Left" Margin="4,10"/>
+            
+            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="4,10">
+                <Button Command="{Binding ConfirmCommand}" Content="OK" MinWidth="80" MinHeight="24" Margin="0,0,4,0"/>
+                <Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="80" MinHeight="24" Margin="4,0,0,0"/>
+            </StackPanel>
         </StackPanel>
 
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
-            <Button Command="{Binding ConfirmCommand}" Content="OK" MinWidth="80" MinHeight="24" Margin="0,0,4,0"/>
-            <Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="80" MinHeight="24" Margin="4,0,0,0"/>
-        </StackPanel>
 
-    </Grid>
 </Window>
