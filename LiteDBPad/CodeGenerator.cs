@@ -121,11 +121,10 @@ namespace LiteDBPad
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    _database.Dispose();
+                    _database = null;
                 }
 
-                _database.Dispose();
-                _database = null;
 
                 disposedValue = true;
             }
@@ -133,7 +132,7 @@ namespace LiteDBPad
 
         ~");
             
-            #line 71 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
+            #line 70 "C:\Users\Adolfo\Source\Repos\litedbpad\LiteDBPad\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default

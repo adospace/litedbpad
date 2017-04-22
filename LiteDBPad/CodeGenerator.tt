@@ -58,11 +58,10 @@ namespace <#= Namespace #>
             {
                 if (disposing)
                 {
-                    // TODO: dispose managed state (managed objects).
+                    _database.Dispose();
+                    _database = null;
                 }
 
-                _database.Dispose();
-                _database = null;
 
                 disposedValue = true;
             }
