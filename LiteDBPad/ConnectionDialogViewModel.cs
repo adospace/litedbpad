@@ -19,9 +19,7 @@ namespace LiteDBPad
         public ConnectionDialog View { get; private set; }
         public ConnectionDialogViewModel(ConnectionDialog view)
         {
-            if (view == null)
-                throw new ArgumentNullException(nameof(view));
-            View = view;
+            View = view ?? throw new ArgumentNullException(nameof(view));
             View.pwdBox.PasswordChanged += (s, e) => Password = View.pwdBox.Password;
         }
 
@@ -168,17 +166,15 @@ namespace LiteDBPad
 
         #region Mode
 
-        private FileMode _mode = FileMode.Exclusive;
+        private FileMode _mode = FileMode.Shared;
         public FileMode Mode
         {
-            get { return _mode; }
+            get => _mode;
             set
             {
-                if (_mode != value)
-                {
-                    _mode = value;
-                    RaisePropertyChanged("Mode");
-                }
+                if (_mode == value) return;
+                _mode = value;
+                RaisePropertyChanged("Mode");
             }
         }
 
@@ -201,9 +197,6 @@ namespace LiteDBPad
         }
 
         #endregion
-
-
-
 
         #region Connection
 
@@ -242,14 +235,9 @@ namespace LiteDBPad
         #endregion
 
         #region FileModes
-        public IEnumerable<FileMode> Modes
-        {
-            get
-            {
-                return Enum.GetValues(typeof(FileMode))
-                    .Cast<FileMode>();
-            }
-        }
+        public IEnumerable<FileMode> Modes => Enum.GetValues(typeof(FileMode))
+            .Cast<FileMode>();
+
         #endregion
 
         #region TestConnection Command

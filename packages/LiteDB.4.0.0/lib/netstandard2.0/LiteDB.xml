@@ -3116,6 +3116,11 @@
             "upgrade": Test if database is in old version and update if needed (default: false)
             </summary>
         </member>
+        <member name="P:LiteDB.ConnectionString.Async">
+            <summary>
+            "async": Use "sync over async" to UWP apps access any directory
+            </summary>
+        </member>
         <member name="M:LiteDB.ConnectionString.#ctor">
             <summary>
             Initialize empty connection string

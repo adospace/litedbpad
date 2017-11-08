@@ -42,9 +42,8 @@
       <HintPath>LinqPad\LINQPad.exe</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="LiteDB, Version=3.1.0.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiteDB.3.1.0\lib\net35\LiteDB.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="LiteDB, Version=4.0.0.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.4.0.0\lib\net40\LiteDB.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -79,6 +78,7 @@
     <Compile Include="RelayCommand.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include="CodeGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>CodeGenerator.cs</LastGenOutput>
