@@ -8,7 +8,7 @@ To install LiteDbPad:
 2) in LinqPad Add Connection->More Drivers->Browse to LPX file
 Once installed, you should be able to select the driver in the Add Connection dialog.
 
-LiteDbPad can open LiteDB 3.0 files and let you specify some connection string properties like Password etc.
+LiteDbPad can open LiteDB 4.0 files and let you specify some connection string properties like Password etc.
 
 Query database with expressions like
 
