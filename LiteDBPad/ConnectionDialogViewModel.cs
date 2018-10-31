@@ -257,25 +257,29 @@ namespace LiteDBPad
         {
             try
             {
-                var cs = new ConnectionString(Filename);
-
-                cs.CacheSize = CacheSize;
-                cs.InitialSize = InitialSize;
-                cs.Journal = Journal;
-                cs.LimitSize = LimitSize;
-                cs.Mode = Mode;
-                cs.Password = Password;
+                var cs = new ConnectionString(Filename)
+                {
+                    CacheSize = CacheSize,
+                    InitialSize = InitialSize,
+                    Journal = Journal,
+                    LimitSize = LimitSize,
+                    Mode = Mode,
+                    Password = Password
+                };
 
                 using (var db = new LiteDatabase(cs))
                     db.GetCollectionNames();
 
                 if (showSuccedMessage)
                     MessageBox.Show("Test succeed!", "LiteDB Connection");
+
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show(View, "Unable to open database, please check connection settings and try again", "LiteDB Connection");
+                MessageBox.Show(View, $@"Unable to open database, please check connection settings and try again.
+Exception:
+{ex}", "LiteDB Connection");
             }
 
             return false;

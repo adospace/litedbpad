@@ -25,3 +25,5 @@ D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Release\LiteDBPad.g.resources
 D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Release\LiteDBPad.csproj.CoreCompileInputs.cache
 D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Release\LiteDBPad.dll
 D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Release\LiteDBPad.pdb
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Release\LiteDBPad.csprojAssemblyReference.cache
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Release\LiteDBPad.csproj.CopyComplete
