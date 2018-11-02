@@ -16,23 +16,22 @@ namespace LiteDBPad
 
         public ConnectionProperties(IConnectionInfo cxInfo)
         {
-            if (cxInfo == null)
-                throw new ArgumentNullException(nameof(cxInfo));
-            _cxInfo = cxInfo;
+            _cxInfo = cxInfo ?? throw new ArgumentNullException(nameof(cxInfo));
         }
 
         public ConnectionString GetConnectionString()
         {
-            var cs = new ConnectionString(Filename);
-
-            cs.CacheSize = CacheSize;
-            cs.InitialSize = InitialSize;
-            cs.Journal = Journal;
-            cs.LimitSize = LimitSize;
-            cs.Mode = Mode;
-            cs.Password = Password;
-            cs.Timeout = Timeout;
-            cs.Upgrade = Upgrade;
+            var cs = new ConnectionString(Filename)
+            {
+                CacheSize = CacheSize,
+                InitialSize = InitialSize,
+                Journal = Journal,
+                LimitSize = LimitSize,
+                Mode = Mode,
+                Password = Password,
+                Timeout = Timeout,
+                Upgrade = Upgrade
+            };
 
             return cs;
         }

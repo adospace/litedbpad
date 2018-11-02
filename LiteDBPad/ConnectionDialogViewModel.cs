@@ -130,7 +130,7 @@ namespace LiteDBPad
 
         #region Journal
 
-        private bool _journal = false;
+        private bool _journal = true;
         public bool Journal
         {
             get { return _journal; }
@@ -148,7 +148,7 @@ namespace LiteDBPad
 
         #region LimitSize
 
-        private long _limitSize = 0;
+        private long _limitSize = long.MaxValue;
         public long LimitSize
         {
             get { return _limitSize; }
