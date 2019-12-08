@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageTags>linqpad-driver</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\LiteDBPad\ConnectionDialog.xaml.cs" Link="ConnectionDialog.xaml.cs" />
+    <Compile Include="..\LiteDBPad\ConnectionDialogViewModel.cs" Link="ConnectionDialogViewModel.cs" />
+    <Compile Include="..\LiteDBPad\ConnectionProperties.cs" Link="ConnectionProperties.cs" />
+    <Compile Include="..\LiteDBPad\DumpableBsonDocument.cs" Link="DumpableBsonDocument.cs" />
+    <Compile Include="..\LiteDBPad\DumpableBsonDocumentCollection.cs" Link="DumpableBsonDocumentCollection.cs" />
+    <Compile Include="..\LiteDBPad\DynamicDataContextDriver.cs" Link="DynamicDataContextDriver.cs" />
+    <Compile Include="..\LiteDBPad\Extensions.cs" Link="Extensions.cs" />
+    <Compile Include="..\LiteDBPad\RelayCommand.cs" Link="RelayCommand.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="LINQPad.Reference" Version="1.1.0" />
+    <PackageReference Include="LiteDB" Version="4.1.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.4.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Include="..\LiteDBPad\ConnectionDialog.xaml" Link="ConnectionDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="CodeGenerator.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CodeGenerator.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="CodeGenerator.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>CodeGenerator.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="ConnectionDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <Target Name="PostBuild1" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <Exec Command="xcopy /i/y/s &quot;$(TargetDir)*.*&quot; &quot;%25LocalAppData%25\\LINQPad\\Drivers\\DataContext\\NetCore\\$(TargetName)&quot;" />
+  </Target>
+</Project>

@@ -53,3 +53,16 @@ C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\
 C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\bin\Debug\zh-CN\Humanizer.resources.dll
 C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\bin\Debug\zh-Hans\Humanizer.resources.dll
 C:\Users\Adolfo\Documents\Visual Studio 2015\Projects\Tests\LiteDBPad\LiteDBPad\bin\Debug\zh-Hant\Humanizer.resources.dll
+D:\Source\Workspaces\litedbpad\LiteDBPad\bin\Debug\header.xml
+D:\Source\Workspaces\litedbpad\LiteDBPad\bin\Debug\LiteDBPad.dll
+D:\Source\Workspaces\litedbpad\LiteDBPad\bin\Debug\LiteDBPad.pdb
+D:\Source\Workspaces\litedbpad\LiteDBPad\bin\Debug\LiteDB.dll
+D:\Source\Workspaces\litedbpad\LiteDBPad\bin\Debug\LiteDB.xml
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Debug\ConnectionDialog.g.cs
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Debug\LiteDBPad_MarkupCompile.cache
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Debug\LiteDBPad_MarkupCompile.lref
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Debug\ConnectionDialog.baml
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Debug\LiteDBPad.g.resources
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Debug\LiteDBPad.csproj.CopyComplete
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Debug\LiteDBPad.dll
+D:\Source\Workspaces\litedbpad\LiteDBPad\obj\Debug\LiteDBPad.pdb

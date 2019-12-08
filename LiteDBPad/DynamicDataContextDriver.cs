@@ -8,6 +8,10 @@ using System.Reflection;
 using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.IO;
+#if NETCOREAPP3_0
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+#endif
 
 namespace LiteDBPad
 {
@@ -66,14 +70,75 @@ namespace LiteDBPad
             return new ConnectionProperties(cxInfo).Filename;
         }
 
-        public override List<ExplorerItem> GetSchemaAndBuildAssembly(IConnectionInfo cxInfo, AssemblyName assemblyToBuild, ref string nameSpace, ref string typeName)
+        public override List<ExplorerItem> GetSchemaAndBuildAssembly(IConnectionInfo cxInfo, AssemblyName assemblyToBuild, ref string @namespace, ref string typeName)
+        {
+            try
+            {
+                return InternalGetSchemaAndBuildAssembly(cxInfo, assemblyToBuild, ref @namespace, ref typeName);
+            }
+            catch(Exception ex)
+            {
+                Log(ex.ToString());
+                throw;
+            }
+        }
+
+        private List<ExplorerItem> InternalGetSchemaAndBuildAssembly(IConnectionInfo cxInfo, AssemblyName assemblyToBuild, ref string @namespace, ref string typeName)
         {
             var connectionProperties = new ConnectionProperties(cxInfo);
 
+#if NETCOREAPP3_0
+            Log("Generating code");
             string code;
-            using (var generator = new CodeGenerator(connectionProperties, nameSpace, typeName))
+            using (var generator = new LiteDBPad6.CodeGenerator(connectionProperties, @namespace, typeName))
                 code = generator.TransformText();
 
+            Log("Compiling code");
+            var script = CSharpScript.Create<int>(code,
+                ScriptOptions.Default.WithReferences(
+                    typeof(object).Assembly,
+                    typeof(LiteDB.LiteDatabase).Assembly,
+                    typeof(LiteDBPad.DumpableBsonDocument).Assembly,
+                    typeof(LINQPad.ICustomMemberProvider).Assembly));
+
+            var diagnostics = script.Compile();
+
+            if (diagnostics.Any())
+            {
+#if DEBUG
+                Log("Error compiling generated code");
+                Log(string.Join(Environment.NewLine, diagnostics));
+#endif
+                throw new Exception
+                     ("Cannot compile typed context: " + diagnostics[0].GetMessage() + " (line " + diagnostics[0].Location + ")");
+            }
+
+            Log("Get compilation");
+            var compilation = script.GetCompilation();
+
+            Assembly generatedAssembly;
+            using (var dllStream = new MemoryStream())
+            {
+                compilation.Emit(dllStream);
+
+                Log("Loading compilation assembly");
+                generatedAssembly = Assembly.Load(dllStream.ToArray());
+            }
+
+            Log($"Get generated assembly");
+            //Log(string.Join(Environment.NewLine, generatedAssembly.GetTypes().Select(_ => _.FullName)));
+            var typeNameGenerated = typeName;
+            var customType = generatedAssembly.GetTypes().FirstOrDefault(_ => _.FullName.EndsWith(typeNameGenerated));
+
+            if (customType == null)
+                throw new InvalidOperationException();
+
+            Log($"Loading {typeof(LiteDB.LiteDatabase).Assembly.Location}");
+            LoadAssemblySafely(typeof(LiteDB.LiteDatabase).Assembly.Location);
+#else
+            string code;
+            using (var generator = new LiteDBPad.CodeGenerator(connectionProperties, @namespace, typeName))
+                code = generator.TransformText();
             // Use the CSharpCodeProvider to compile the generated code:
             CompilerResults results;
             using (var codeProvider = new CSharpCodeProvider(new Dictionary<string, string>() { { "CompilerVersion", "v4.0" } }))
@@ -93,15 +158,17 @@ namespace LiteDBPad
                 throw new Exception
                      ("Cannot compile typed context: " + results.Errors[0].ErrorText + " (line " + results.Errors[0].Line + ")");
 
-            var customType = results.CompiledAssembly.GetType(string.Concat(nameSpace, ".", typeName));
+            var customType = results.CompiledAssembly.GetType(string.Concat(@namespace, ".", typeName));
 
             if (customType == null)
                 throw new InvalidOperationException();
-
+#endif
             var items = GetSchema(cxInfo, customType);
+
 #if DEBUG
             Log("Found {0} items", items.Count);
 #endif
+
             return items;
         }
 
@@ -158,35 +225,35 @@ namespace LiteDBPad
             return topLevelProps;
         }
 
-        ExplorerItem GetChildItem(ILookup<Type, ExplorerItem> elementTypeLookup, PropertyInfo childProp)
-        {
-            // If the property's type is in our list of entities, then it's a Many:1 (or 1:1) reference.
-            // We'll assume it's a Many:1 (we can't reliably identify 1:1s purely from reflection).
-            if (elementTypeLookup.Contains(childProp.PropertyType))
-                return new ExplorerItem(childProp.Name, ExplorerItemKind.ReferenceLink, ExplorerIcon.ManyToOne)
-                {
-                    HyperlinkTarget = elementTypeLookup[childProp.PropertyType].First(),
-                    // FormatTypeName is a helper method that returns a nicely formatted type name.
-                    ToolTipText = FormatTypeName(childProp.PropertyType, true)
-                };
+        //ExplorerItem GetChildItem(ILookup<Type, ExplorerItem> elementTypeLookup, PropertyInfo childProp)
+        //{
+        //    // If the property's type is in our list of entities, then it's a Many:1 (or 1:1) reference.
+        //    // We'll assume it's a Many:1 (we can't reliably identify 1:1s purely from reflection).
+        //    if (elementTypeLookup.Contains(childProp.PropertyType))
+        //        return new ExplorerItem(childProp.Name, ExplorerItemKind.ReferenceLink, ExplorerIcon.ManyToOne)
+        //        {
+        //            HyperlinkTarget = elementTypeLookup[childProp.PropertyType].First(),
+        //            // FormatTypeName is a helper method that returns a nicely formatted type name.
+        //            ToolTipText = FormatTypeName(childProp.PropertyType, true)
+        //        };
 
-            // Is the property's type a collection of entities?
-            Type ienumerableOfT = childProp.PropertyType.GetInterface("System.Collections.Generic.IEnumerable`1");
-            if (ienumerableOfT != null)
-            {
-                Type elementType = ienumerableOfT.GetGenericArguments()[0];
-                if (elementTypeLookup.Contains(elementType))
-                    return new ExplorerItem(childProp.Name, ExplorerItemKind.CollectionLink, ExplorerIcon.OneToMany)
-                    {
-                        HyperlinkTarget = elementTypeLookup[elementType].First(),
-                        ToolTipText = FormatTypeName(elementType, true)
-                    };
-            }
+        //    // Is the property's type a collection of entities?
+        //    Type ienumerableOfT = childProp.PropertyType.GetInterface("System.Collections.Generic.IEnumerable`1");
+        //    if (ienumerableOfT != null)
+        //    {
+        //        Type elementType = ienumerableOfT.GetGenericArguments()[0];
+        //        if (elementTypeLookup.Contains(elementType))
+        //            return new ExplorerItem(childProp.Name, ExplorerItemKind.CollectionLink, ExplorerIcon.OneToMany)
+        //            {
+        //                HyperlinkTarget = elementTypeLookup[elementType].First(),
+        //                ToolTipText = FormatTypeName(elementType, true)
+        //            };
+        //    }
 
-            // Ordinary property:
-            return new ExplorerItem(childProp.Name + " (" + FormatTypeName(childProp.PropertyType, false) + ")",
-                 ExplorerItemKind.Property, ExplorerIcon.Column);
-        }
+        //    // Ordinary property:
+        //    return new ExplorerItem(childProp.Name + " (" + FormatTypeName(childProp.PropertyType, false) + ")",
+        //         ExplorerItemKind.Property, ExplorerIcon.Column);
+        //}
 
         public override bool ShowConnectionDialog(IConnectionInfo cxInfo, bool isNewConnection)
         {
@@ -204,11 +271,11 @@ namespace LiteDBPad
             return false;
         }
 
-#if DEBUG
         public static void Log(string message, params object[] values)
         {
-            File.AppendAllText(@"c:\temp\litedbpad.log", string.Format("{0}{1}{2}", DateTime.Now.ToLongTimeString(), string.Format(message, values), Environment.NewLine));
-        }
+#if DEBUG
+            File.AppendAllText(@"d:\temp\litedbpad.log", values.Length == 0 ? message + Environment.NewLine : string.Format("{0} {1}{2}", DateTime.Now.ToLongTimeString(), string.Format(message, values), Environment.NewLine));
 #endif
+        }
     }
 }

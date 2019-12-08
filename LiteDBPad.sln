@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteDBPad", "LiteDBPad\LiteDBPad.csproj", "{042112BA-D1F1-4D06-B53A-C4D25C8D51E2}"
 EndProject
@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		LiteDBPad.lpx = LiteDBPad.lpx
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteDBPad6", "LiteDBPad6\LiteDBPad6.csproj", "{DA9F82BD-2554-4F75-9761-AC747B761226}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,8 +22,15 @@ Global
 		{042112BA-D1F1-4D06-B53A-C4D25C8D51E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{042112BA-D1F1-4D06-B53A-C4D25C8D51E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{042112BA-D1F1-4D06-B53A-C4D25C8D51E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA9F82BD-2554-4F75-9761-AC747B761226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA9F82BD-2554-4F75-9761-AC747B761226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA9F82BD-2554-4F75-9761-AC747B761226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA9F82BD-2554-4F75-9761-AC747B761226}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCB35AE9-E3F8-41BB-9ABD-9E26CFE51E60}
 	EndGlobalSection
 EndGlobal
