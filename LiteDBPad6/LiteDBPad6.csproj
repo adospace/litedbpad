@@ -4,8 +4,18 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageTags>linqpad-driver</PackageTags>
+    <Version Condition=" '$(APPVEYOR_BUILD_VERSION)' == '' ">0.0.1-local</Version>
+    <Version Condition=" '$(APPVEYOR_BUILD_VERSION)' != '' ">$(APPVEYOR_BUILD_VERSION)-beta</Version>
+    <Authors>adospace</Authors>
+    <Description>LiteDBPad6 is a LinqPad (v6) plugin for LiteDB v.4+.</Description>
+    <Copyright>Adolfo Marinucci</Copyright>
+    <PackageProjectUrl>https://github.com/adospace/litedbpad</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/adospace/litedbpad/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/adospace/litedbpad</RepositoryUrl>
+    <PackageTags>linqpaddriver</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
