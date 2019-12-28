@@ -1,6 +1,8 @@
 # litedbpad
 LinqPad driver for LiteDB
 
+[![Build status](https://ci.appveyor.com/api/projects/status/0ckrd3197ggxcny6?svg=true)](https://ci.appveyor.com/project/adospace/litedbpad)
+
 LiteDbPad is a Dynamic driver for LinqPad. I've tested it in LinqPad 4.x but should work with version 5 just fine.
 
 To install or update LiteDbPad: 
