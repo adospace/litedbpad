@@ -1,0 +1,54 @@
+﻿<Window x:Class="LiteDBPad.ConnectionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:LiteDBPad"
+        mc:Ignorable="d" 
+        Title="LiteDB Connection Properties"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        Width="400"
+        d:DesignHeight="600" d:DesignWidth="400">
+
+    <StackPanel Orientation="Vertical" Margin="5">
+        <TextBlock Text="File name:" Margin="4"/>
+        <Grid Margin="4,0,4,4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding Filename, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0"/>
+            <Button Command="{Binding BrowseCommand}" Content="..." MinWidth="24" Margin="4,0,0,0" Grid.Column="1"/>
+        </Grid>
+
+        <TextBlock Text="Password:" Margin="4"/>
+        <PasswordBox x:Name="pwdBox" Margin="4,0,4,4" Width="200" HorizontalAlignment="Left"/>
+
+        <Expander Header="Advanced" IsExpanded="False" Margin="0,4,0,0">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Connection Type:" Margin="2,4,2,2"/>
+                <ComboBox SelectedItem="{Binding Mode, Mode=TwoWay}" ItemsSource="{Binding Modes, Mode=OneTime}" Margin="2"/>
+                <CheckBox IsChecked="{Binding ReadOnly, Mode=TwoWay}" Content="Read Only" Margin="2,4,2,2"/>
+                <CheckBox IsChecked="{Binding Upgrade, Mode=TwoWay}" Content="Upgrade" Margin="2,4,2,2"/>
+                <CheckBox IsChecked="{Binding Persist, Mode=TwoWay}" Content="Persist connection info" Margin="2,4,2,2"/>
+
+                <TextBlock Text="Initial Size:" Margin="2,4,2,2"/>
+                <TextBox Text="{Binding InitialSize, Mode=TwoWay}" Margin="2"/>
+
+            </StackPanel>
+        </Expander>
+
+
+        <Button Command="{Binding TestConnectionCommand}" Content="Test Connection" MinHeight="24" MinWidth="24" HorizontalAlignment="Left" Margin="4,10"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="4,10">
+            <Button Command="{Binding ConfirmCommand}" Content="OK" MinWidth="80" MinHeight="24" Margin="0,0,4,0"/>
+            <Button Command="{Binding CancelCommand}" Content="Cancel" MinWidth="80" MinHeight="24" Margin="4,0,0,0"/>
+        </StackPanel>
+    </StackPanel>
+
+
+
+</Window>

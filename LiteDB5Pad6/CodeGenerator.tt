@@ -24,14 +24,14 @@ namespace <#= Namespace #>
 	    }
 
 	    public LiteDatabase Database { get { return _database; }}
-	    public LiteCollection<DumpableBsonDocument> GetCollection(string name)
+	    public ILiteCollection<DumpableBsonDocument> GetCollection(string name)
 	    {
 		    return _database.GetCollection<DumpableBsonDocument>(name);
 	    }
 
 
 	    <# foreach (var collectionName in _collectionNames) {#>
-	    public LiteCollection<DumpableBsonDocument> <#= Capitalize(collectionName) #>
+	    public ILiteCollection<DumpableBsonDocument> <#= Capitalize(collectionName) #>
 	    {
 		    get
 		    {

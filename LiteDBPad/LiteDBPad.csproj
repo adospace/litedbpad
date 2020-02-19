@@ -78,7 +78,6 @@
     <Compile Include="RelayCommand.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitignore" />
     <Content Include="CodeGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>CodeGenerator.cs</LastGenOutput>

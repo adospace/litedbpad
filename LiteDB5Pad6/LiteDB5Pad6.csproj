@@ -7,7 +7,7 @@
     <Version Condition=" '$(APPVEYOR_BUILD_VERSION)' == '' ">0.0.1-local</Version>
     <Version Condition=" '$(APPVEYOR_BUILD_VERSION)' != '' ">$(APPVEYOR_BUILD_VERSION)</Version>
     <Authors>adospace</Authors>
-    <Description>LiteDBPad6 is a LinqPad (v6) plugin for LiteDB v.4. NOTE: THIS IS FOR LITEDB VERSION 4 ONLY.  (for version version 5+ see https://www.nuget.org/packages/LiteDB5Pad6 )</Description>
+    <Description>LiteDBPad6 is a LinqPad (v6) plugin for LiteDB v.5+. NOTE: THIS IS FOR LITEDB VERSION 5+ (for version version 4 see https://www.nuget.org/packages/LiteDBPad6 ).</Description>
     <Copyright>Adolfo Marinucci</Copyright>
     <PackageProjectUrl>https://github.com/adospace/litedbpad</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -17,54 +17,34 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <LangVersion>latest</LangVersion>
     <RootNamespace>LiteDBPad</RootNamespace>
-    <DefineConstants>NETCORE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\LiteDBPad\ConnectionDialog.xaml.cs" Link="ConnectionDialog.xaml.cs" />
-    <Compile Include="..\LiteDBPad\ConnectionDialogViewModel.cs" Link="ConnectionDialogViewModel.cs" />
-    <Compile Include="..\LiteDBPad\ConnectionProperties.cs" Link="ConnectionProperties.cs" />
-    <Compile Include="..\LiteDBPad\DumpableBsonDocument.cs" Link="DumpableBsonDocument.cs" />
-    <Compile Include="..\LiteDBPad\DumpableBsonDocumentCollection.cs" Link="DumpableBsonDocumentCollection.cs" />
-    <Compile Include="..\LiteDBPad\DynamicDataContextDriver.cs" Link="DynamicDataContextDriver.cs" />
-    <Compile Include="..\LiteDBPad\Extensions.cs" Link="Extensions.cs" />
     <Compile Include="..\LiteDBPad\RelayCommand.cs" Link="RelayCommand.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="LINQPad.Reference" Version="1.1.0" />
-    <PackageReference Include="LiteDB" Version="4.1.4" />
+    <PackageReference Include="LiteDB" Version="5.0.2" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <Page Include="..\LiteDBPad\ConnectionDialog.xaml" Link="ConnectionDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <None Update="CodeGenerator.tt">
+      <LastGenOutput>CodeGenerator.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="CodeGenerator.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CodeGenerator.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Update="CodeGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CodeGenerator.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Page Update="ConnectionDialog.xaml">
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
 
   <Target Name="PostBuild1" AfterTargets="PostBuildEvent">

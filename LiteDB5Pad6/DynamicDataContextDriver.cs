@@ -21,11 +21,8 @@ namespace LiteDBPad
 
         public override string Author => "adospace";
 
-#if NETCORE
-        public override string Name => "LiteDB v.4 Dynamic Context for LinqPad 6 (.NET Core)";
-#else
-        public override string Name => "LiteDB v.4 Dynamic Context for LinqPad 5 (.NET Full)";
-#endif
+        public override string Name => "LiteDB v.5+ Dynamic Context for LinqPad 6 (.NET Core)";
+
         public override IEnumerable<string> GetAssembliesToAdd(IConnectionInfo cxInfo)
         {
             return new string[]
@@ -84,7 +81,6 @@ namespace LiteDBPad
         {
             var connectionProperties = new ConnectionProperties(cxInfo);
 
-#if NETCORE
             Log("Generating code");
             string code;
             var properties = new List<PropertyInfo>();
@@ -99,7 +95,7 @@ namespace LiteDBPad
             assembliesToReference.Add(typeof(DynamicDataContextDriver).Assembly.Location);
             assembliesToReference.Add(typeof(LiteDB.LiteDatabase).Assembly.Location);
 
-            //Log($"Assemblies: {string.Join(Environment.NewLine, assembliesToReference)}");
+            Log($"Assemblies: {string.Join(Environment.NewLine, assembliesToReference)}");
 
             var compileResult = CompileSource(new CompilationInput
             {
@@ -119,45 +115,6 @@ namespace LiteDBPad
 
             var items = GetSchema(cxInfo, properties.ToArray());
 
-#else
-            string code;
-            //using (var generator = new LiteDBPad.CodeGenerator(connectionProperties, @namespace, typeName))
-            //    code = generator.TransformText();
-            var properties = new List<PropertyInfo>();
-            using (var generator = new LiteDBPad.CodeGenerator(connectionProperties, @namespace, typeName))
-            {
-                //properties.AddRange(generator.CapitalizedCollectionNames.Select(_ => new PropertyInfo(_, typeof(LiteCollection<DumpableBsonDocument>))));
-                properties.AddRange(generator.CapitalizedCollectionNames.Select(_ => new PropertyInfo("All" + _, typeof(DumpableBsonDocumentCollection))));
-                code = generator.TransformText();
-            }
-            
-            // Use the CSharpCodeProvider to compile the generated code:
-            CompilerResults results;
-            using (var codeProvider = new CSharpCodeProvider(new Dictionary<string, string>() { { "CompilerVersion", "v4.0" } }))
-            {
-                var options = new CompilerParameters(
-                     "System.dll System.Core.dll System.Xml.dll System.Data.Services.Client.dll".Split(),
-                     assemblyToBuild.CodeBase,
-                     true);
-
-                options.ReferencedAssemblies.Add(typeof(LiteDB.LiteDatabase).Assembly.Location);
-                options.ReferencedAssemblies.Add(typeof(LiteDBPad.DumpableBsonDocument).Assembly.Location);
-                options.ReferencedAssemblies.Add(typeof(LINQPad.ICustomMemberProvider).Assembly.Location);
-
-                results = codeProvider.CompileAssemblyFromSource(options, code);
-            }
-            if (results.Errors.Count > 0)
-                throw new Exception
-                     ("Cannot compile typed context: " + results.Errors[0].ErrorText + " (line " + results.Errors[0].Line + ")");
-
-            //var customType = results.CompiledAssembly.GetType(string.Concat(@namespace, ".", typeName));
-
-            //if (customType == null)
-            //    throw new InvalidOperationException();
-
-            var items = GetSchema(cxInfo, properties.ToArray());
-#endif
-
 #if DEBUG
             Log("Found {0} items", items.Count);
 #endif
@@ -167,53 +124,19 @@ namespace LiteDBPad
 
         private List<ExplorerItem> GetSchema(IConnectionInfo cxInfo, PropertyInfo[] properties)
         {
-//#if DEBUG
-//            var topLevelProperties = from prop in properties
-//                                     where prop.PropertyType != typeof(string)
-
-//                                     // Display all properties of type IEnumerable<T> (except for string!)
-//                                     let ienumerableOfT = prop.PropertyType.GetInterface("System.Collections.Generic.IEnumerable`1")
-//                                     where ienumerableOfT != null
-//                                     select prop;
-//            foreach (var tp in topLevelProperties)
-//                Log("TopLevelProperty={0}", tp.Name);
-//#endif
-            // Return the objects with which to populate the Schema Explorer by reflecting over customType.
-
-                                     // We'll start by retrieving all the properties of the custom type that implement IEnumerable<T>:
             var topLevelProps =
             (
                  from prop in properties
-                 //where prop.PropertyType != typeof(string)
-
-                 //   // Display all properties of type IEnumerable<T> (except for string!)
-                 //   let ienumerableOfT = prop.PropertyType.GetInterface("System.Collections.Generic.IEnumerable`1")
-                 //where ienumerableOfT != null
-
                  orderby prop.Name
 
                  select new ExplorerItem(prop.Name, ExplorerItemKind.QueryableObject, ExplorerIcon.Table)
                  {
                      IsEnumerable = true,
                      ToolTipText = FormatTypeName(prop.PropertyType, false),
-
-                        // Store the entity type to the Tag property. We'll use it later.
-                        //Tag = ienumerableOfT.GetGenericArguments()[0]
                  }
 
             ).ToList();
 
-            // Create a lookup keying each element type to the properties of that type. This will allow
-            // us to build hyperlink targets allowing the user to click between associations:
-            //var elementTypeLookup = topLevelProps.ToLookup(tp => (Type)tp.Tag);
-
-            // Populate the columns (properties) of each entity:
-            //foreach (ExplorerItem table in topLevelProps)
-            //    table.Children = ((Type)table.Tag)
-            //         .GetProperties()
-            //         .Select(childProp => GetChildItem(elementTypeLookup, childProp))
-            //         .OrderBy(childItem => childItem.Kind)
-            //         .ToList();
 
             return topLevelProps;
         }
