@@ -9,10 +9,10 @@ using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using System.IO;
 using LiteDB;
-#if NETCOREAPP3_0
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
-#endif
+//#if NETCOREAPP3_0
+//using Microsoft.CodeAnalysis.CSharp.Scripting;
+//using Microsoft.CodeAnalysis.Scripting;
+//#endif
 
 namespace LiteDBPad
 {

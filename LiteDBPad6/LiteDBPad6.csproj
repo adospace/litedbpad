@@ -32,7 +32,6 @@
   <ItemGroup>
     <PackageReference Include="LINQPad.Reference" Version="1.1.0" />
     <PackageReference Include="LiteDB" Version="4.1.4" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.4.0" />
   </ItemGroup>
   
   <ItemGroup>
