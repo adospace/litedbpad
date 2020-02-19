@@ -14,7 +14,9 @@ namespace LiteDBPad
         public readonly string TypeName;
 
         private LiteDatabase _database = null;
-        private IEnumerable<string> _collectionNames = null;
+        private readonly IEnumerable<string> _collectionNames;
+
+        public IEnumerable<string> CapitalizedCollectionNames { get; }
 
         public CodeGenerator(ConnectionProperties connectionProperties, string ns, string typeName)
         {
@@ -30,6 +32,7 @@ namespace LiteDBPad
             TypeName = typeName;
             _database = new LiteDatabase(connectionProperties.GetConnectionString());
             _collectionNames = _database.GetCollectionNames();
+            CapitalizedCollectionNames = _collectionNames.Select(_ => Capitalize(_));
         }
 
         static string Capitalize(string name)

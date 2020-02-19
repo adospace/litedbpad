@@ -8,77 +8,82 @@ using System;
 using System.Collections.Generic;
 using LiteDB;
 using LiteDBPad;
+using LiteDBPad6;
 
-public class <#= TypeName #> : IDisposable
+namespace <#= Namespace #>
 {
-    private LiteDatabase _database = null;
+    public class <#= TypeName #> : IDisposable
+    {
+        private LiteDatabase _database = null;
 
-	public <#= TypeName #>(ConnectionString connectionString)
-	{
-		if (connectionString == null)
-            throw new ArgumentNullException("connectionString");
+	    public <#= TypeName #>(ConnectionString connectionString)
+	    {
+		    if (connectionString == null)
+                throw new ArgumentNullException("connectionString");
 			 
-		_database = new LiteDatabase(connectionString);
-	}
+		    _database = new LiteDatabase(connectionString);
+	    }
 
-	public LiteDatabase Database { get { return _database; }}
-	public LiteCollection<DumpableBsonDocument> GetCollection(string name)
-	{
-		return _database.GetCollection<DumpableBsonDocument>(name);
-	}
-
-
-	<# foreach (var collectionName in _collectionNames) {#>
-	public LiteCollection<DumpableBsonDocument> <#= Capitalize(collectionName) #>
-	{
-		get
-		{
-			return _database.GetCollection<DumpableBsonDocument>("<#= collectionName #>");
-		}		  
-	}
-
-	public DumpableBsonDocumentCollection All<#= Capitalize(collectionName) #>
-	{
-		get
-		{
-			return new DumpableBsonDocumentCollection(_database.GetCollection<DumpableBsonDocument>("<#= collectionName #>").FindAll());
-		}
-	}
-	<# } #>
+	    public LiteDatabase Database { get { return _database; }}
+	    public LiteCollection<DumpableBsonDocument> GetCollection(string name)
+	    {
+		    return _database.GetCollection<DumpableBsonDocument>(name);
+	    }
 
 
-    #region IDisposable Support
-    private bool disposedValue = false; // To detect redundant calls
+	    <# foreach (var collectionName in _collectionNames) {#>
+	    public LiteCollection<DumpableBsonDocument> <#= Capitalize(collectionName) #>
+	    {
+		    get
+		    {
+			    return _database.GetCollection<DumpableBsonDocument>("<#= collectionName #>");
+		    }		  
+	    }
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
+	    public DumpableBsonDocumentCollection All<#= Capitalize(collectionName) #>
+	    {
+		    get
+		    {
+			    return new DumpableBsonDocumentCollection(_database.GetCollection<DumpableBsonDocument>("<#= collectionName #>").FindAll());
+		    }
+	    }
+	    <# } #>
+
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!disposedValue)
             {
-                _database.Dispose();
-                _database = null;
+                if (disposing)
+                {
+                    _database.Dispose();
+                    _database = null;
+                }
+
+
+                disposedValue = true;
             }
-
-
-            disposedValue = true;
         }
-    }
 
-    ~<#= TypeName #>()
-    {
-        // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        Dispose(false);
-    }
+        ~<#= TypeName #>()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(false);
+        }
 
-    // This code added to correctly implement the disposable pattern.
-    public void Dispose()
-    {
-        // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-    #endregion
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
 
     
+    }
+
 }

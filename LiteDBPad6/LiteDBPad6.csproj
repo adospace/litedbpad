@@ -10,7 +10,7 @@
     <Description>LiteDBPad6 is a LinqPad (v6) plugin for LiteDB v.4+.</Description>
     <Copyright>Adolfo Marinucci</Copyright>
     <PackageProjectUrl>https://github.com/adospace/litedbpad</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/adospace/litedbpad/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/adospace/litedbpad</RepositoryUrl>
     <PackageTags>linqpaddriver</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -67,6 +67,6 @@
   </ItemGroup>
 
   <Target Name="PostBuild1" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <Exec Command="xcopy /i/y/s &quot;$(TargetDir)*.*&quot; &quot;%25LocalAppData%25\\LINQPad\\Drivers\\DataContext\\NetCore\\$(TargetName)&quot;" />
+    <Exec Command="xcopy /i/y/s &quot;$(TargetDir)*.*&quot; &quot;%25LocalAppData%25\LINQPad\Drivers\DataContext\NetCore\$(TargetName)&quot;" />
   </Target>
 </Project>

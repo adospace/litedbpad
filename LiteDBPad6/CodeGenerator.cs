@@ -29,121 +29,132 @@ namespace LiteDBPad6
         public virtual string TransformText()
         {
             this.Write("\r\nusing System;\r\nusing System.Collections.Generic;\r\nusing LiteDB;\r\nusing LiteDBPa" +
-                    "d;\r\n\r\npublic class ");
+                    "d;\r\nusing LiteDBPad6;\r\n\r\nnamespace ");
             
-            #line 12 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            #line 13 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n{\r\n    public class ");
+            
+            #line 15 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
-            this.Write(" : IDisposable\r\n{\r\n    private LiteDatabase _database = null;\r\n\r\n\tpublic ");
+            this.Write(" : IDisposable\r\n    {\r\n        private LiteDatabase _database = null;\r\n\r\n\t    pub" +
+                    "lic ");
             
-            #line 16 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            #line 19 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(@"(ConnectionString connectionString)
-	{
-		if (connectionString == null)
-            throw new ArgumentNullException(""connectionString"");
+	    {
+		    if (connectionString == null)
+                throw new ArgumentNullException(""connectionString"");
 			 
-		_database = new LiteDatabase(connectionString);
-	}
+		    _database = new LiteDatabase(connectionString);
+	    }
 
-	public LiteDatabase Database { get { return _database; }}
-	public LiteCollection<DumpableBsonDocument> GetCollection(string name)
-	{
-		return _database.GetCollection<DumpableBsonDocument>(name);
-	}
+	    public LiteDatabase Database { get { return _database; }}
+	    public LiteCollection<DumpableBsonDocument> GetCollection(string name)
+	    {
+		    return _database.GetCollection<DumpableBsonDocument>(name);
+	    }
 
 
-	");
+	    ");
             
-            #line 31 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            #line 34 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
  foreach (var collectionName in _collectionNames) {
             
             #line default
             #line hidden
-            this.Write("\tpublic LiteCollection<DumpableBsonDocument> ");
+            this.Write("\t    public LiteCollection<DumpableBsonDocument> ");
             
-            #line 32 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            #line 35 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Capitalize(collectionName)));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t\tget\r\n\t\t{\r\n\t\t\treturn _database.GetCollection<DumpableBsonDocument>(\"");
+            this.Write("\r\n\t    {\r\n\t\t    get\r\n\t\t    {\r\n\t\t\t    return _database.GetCollection<DumpableBsonD" +
+                    "ocument>(\"");
             
-            #line 36 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            #line 39 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(collectionName));
             
             #line default
             #line hidden
-            this.Write("\");\r\n\t\t}\t\t  \r\n\t}\r\n\r\n\tpublic DumpableBsonDocumentCollection All");
+            this.Write("\");\r\n\t\t    }\t\t  \r\n\t    }\r\n\r\n\t    public DumpableBsonDocumentCollection All");
             
-            #line 40 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            #line 43 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Capitalize(collectionName)));
             
             #line default
             #line hidden
-            this.Write("\r\n\t{\r\n\t\tget\r\n\t\t{\r\n\t\t\treturn new DumpableBsonDocumentCollection(_database.GetColle" +
-                    "ction<DumpableBsonDocument>(\"");
-            
-            #line 44 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(collectionName));
-            
-            #line default
-            #line hidden
-            this.Write("\").FindAll());\r\n\t\t}\r\n\t}\r\n\t");
+            this.Write("\r\n\t    {\r\n\t\t    get\r\n\t\t    {\r\n\t\t\t    return new DumpableBsonDocumentCollection(_d" +
+                    "atabase.GetCollection<DumpableBsonDocument>(\"");
             
             #line 47 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(collectionName));
+            
+            #line default
+            #line hidden
+            this.Write("\").FindAll());\r\n\t\t    }\r\n\t    }\r\n\t    ");
+            
+            #line 50 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
  } 
             
             #line default
             #line hidden
             this.Write(@"
 
-    #region IDisposable Support
-    private bool disposedValue = false; // To detect redundant calls
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
+        protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!disposedValue)
             {
-                _database.Dispose();
-                _database = null;
+                if (disposing)
+                {
+                    _database.Dispose();
+                    _database = null;
+                }
+
+
+                disposedValue = true;
             }
-
-
-            disposedValue = true;
         }
-    }
 
-    ~");
+        ~");
             
-            #line 68 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
+            #line 71 "D:\Source\Workspaces\litedbpad\LiteDBPad6\CodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             
             #line default
             #line hidden
             this.Write(@"()
-    {
-        // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        Dispose(false);
-    }
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(false);
+        }
 
-    // This code added to correctly implement the disposable pattern.
-    public void Dispose()
-    {
-        // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-    #endregion
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
 
     
+    }
+
 }");
             return this.GenerationEnvironment.ToString();
         }

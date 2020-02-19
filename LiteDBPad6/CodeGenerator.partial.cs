@@ -18,7 +18,9 @@ namespace LiteDBPad
         public readonly string TypeName;
 
         private LiteDatabase _database = null;
-        private IEnumerable<string> _collectionNames = null;
+        private IEnumerable<string> _collectionNames;
+
+        public IEnumerable<string> CapitalizedCollectionNames { get; }
 
         public CodeGenerator(LiteDBPad.ConnectionProperties connectionProperties, string ns, string typeName)
         {
@@ -34,9 +36,10 @@ namespace LiteDBPad
             TypeName = typeName;
             _database = new LiteDatabase(connectionProperties.GetConnectionString());
             _collectionNames = _database.GetCollectionNames();
+            CapitalizedCollectionNames = _collectionNames.Select(_ => Capitalize(_));
         }
 
-        static string Capitalize(string name)
+        private static string Capitalize(string name)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -52,11 +55,11 @@ namespace LiteDBPad
 
 
         #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+        private bool _disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -66,7 +69,7 @@ namespace LiteDBPad
                 _database.Dispose();
                 _database = null;
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
